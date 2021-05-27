@@ -13,7 +13,7 @@ export class TasksController {
 
   @Post()
   create(
-    @Body('titile') title: string,
+    @Body('title') title: string,
     @Body('description') description: string,
   ): Task {
     return this.taskService.create(title, description);
