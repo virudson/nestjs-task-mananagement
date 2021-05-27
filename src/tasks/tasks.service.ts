@@ -27,4 +27,11 @@ export class TasksService {
     this.tasks.push(record);
     return record;
   }
+
+  destroy(id: string): Task {
+    const task = this.find(id);
+    const deleteIndex = this.tasks.indexOf(task);
+    this.tasks.splice(deleteIndex, 1);
+    return task;
+  }
 }
