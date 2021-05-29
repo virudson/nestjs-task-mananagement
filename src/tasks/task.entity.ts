@@ -1,6 +1,6 @@
 import { title } from 'process';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { TaskStatuses } from './task.model';
+import { TaskStatuses } from './task-statuses';
 
 @Entity()
 export class Task {
