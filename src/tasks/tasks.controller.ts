@@ -18,14 +18,10 @@ import { Task } from './task.entity';
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
-  //   @Get()
-  //   index(@Query() searchDto: SearchTasksDto): Task[] {
-  //     if (Object.keys(searchDto).length) {
-  //       return this.taskService.search(searchDto);
-  //     } else {
-  //       return this.taskService.getAll();
-  //     }
-  //   }
+  @Get()
+  index(@Query() searchDto: SearchTasksDto): Promise<Task[]> {
+    return this.taskService.getAll(searchDto);
+  }
 
   @Get('/:id')
   show(@Param('id') id: string): Promise<Task> {
@@ -37,13 +33,16 @@ export class TasksController {
     return this.taskService.create(taskDto);
   }
 
-  //   @Patch('/:id')
-  //   update(@Param('id') id: string, @Body() taskDto: UpdateTaskDto): Task {
-  //     return this.taskService.update(id, taskDto);
-  //   }
-  //
-  //   @Delete('/:id')
-  //   destroy(@Param('id') id: string): void {
-  //     return this.taskService.destroy(id);
-  //   }
+  @Patch('/:id')
+  update(
+    @Param('id') id: string,
+    @Body() taskDto: UpdateTaskDto,
+  ): Promise<Task> {
+    return this.taskService.update(id, taskDto);
+  }
+
+  @Delete('/:id')
+  destroy(@Param('id') id: string): Promise<void> {
+    return this.taskService.destroy(id);
+  }
 }
