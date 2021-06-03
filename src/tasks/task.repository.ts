@@ -1,11 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { CreateTaskDto } from './dto/create-task.dto';
 import { SearchTasksDto } from './dto/search-tasks.dto';
-import { TaskStatuses } from './task-statuses';
 import { Task } from './task.entity';
 
 @EntityRepository(Task)
-export class TaskRepository extends Repository<Task> {
+export class TasksRepository extends Repository<Task> {
   async search(searchDto: SearchTasksDto): Promise<Task[]> {
     const { status, search } = searchDto;
     const query = this.createQueryBuilder('task');
