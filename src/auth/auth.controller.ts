@@ -3,11 +3,11 @@ import { AuthService } from './auth.service';
 import { SignupDto } from './dto/signup.dto';
 import { User } from './user.entity';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('users/signup')
+  @Post('/users/signup')
   signup(@Body() signupDto: SignupDto): Promise<User> {
     return this.authService.signup(signupDto);
   }
