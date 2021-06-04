@@ -8,6 +8,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
-  password: string;
+  @Column({ name: 'encrypted_password' })
+  encrptedPassword: string;
+
+  @Column({ name: 'auth_token' })
+  token: string;
 }

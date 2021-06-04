@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 
 export class Bcrypt {
-  encrypt(originalData: string, genSaltCount: number = 10): String {
+  static encrypt(originalData: string, genSaltCount: number = 10): string {
     return bcrypt.hashSync(originalData, genSaltCount);
   }
 
-  compare(originalData: String, hash: String): boolean {
+  static compare(originalData: string, hash: string): boolean {
     return bcrypt.compareSync(originalData, hash);
   }
 }
