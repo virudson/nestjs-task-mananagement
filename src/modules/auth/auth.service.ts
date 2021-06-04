@@ -4,9 +4,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DatabaseErrors } from 'src/shared/database-errors';
 import { SignupDto } from './dto/signup.dto';
-import { User } from './user.entity';
-import { UsersRepository } from './user.repository';
+import { User } from '../../models/user.entity';
+import { UsersRepository } from '../../repositories/user.repository';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
       return record;
     } catch (error) {
       switch (error.code) {
-        case '23505':
+        case DatabaseErrors.DUPLICATED:
           throw new ConflictException('Email already exists');
         default:
           throw new InternalServerErrorException();

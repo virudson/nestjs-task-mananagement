@@ -1,6 +1,6 @@
+import { SearchTasksDto } from 'src/modules/tasks/dto/search-tasks.dto';
 import { EntityRepository, Repository } from 'typeorm';
-import { SearchTasksDto } from './dto/search-tasks.dto';
-import { Task } from './task.entity';
+import { Task } from '../models/task.entity';
 
 @EntityRepository(Task)
 export class TasksRepository extends Repository<Task> {

@@ -12,7 +12,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { SearchTasksDto } from './dto/search-tasks.dto';
-import { Task } from './task.entity';
+import { Task } from '../../models/task.entity';
 
 @Controller('tasks')
 export class TasksController {
