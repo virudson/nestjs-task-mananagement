@@ -8,9 +8,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  providers: [AuthService, JwtStrategy],
-  controllers: [AuthController],
-  exports: [JwtStrategy, PassportModule],
   imports: [
     TypeOrmModule.forFeature([UsersRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -19,5 +16,8 @@ import { JwtStrategy } from './jwt.strategy';
       signOptions: { expiresIn: 3600 },
     }),
   ],
+  providers: [AuthService, JwtStrategy],
+  controllers: [AuthController],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

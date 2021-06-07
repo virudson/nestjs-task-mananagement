@@ -5,12 +5,13 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DatabaseErrors } from 'src/shared/database-errors';
-import { SignupDto } from './dto/signup.dto';
-import { UsersRepository } from '../../repositories/user.repository';
-import { Bcrypt } from 'src/shared/bcrypt-helper';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UsersRepository } from 'src/repositories/user.repository';
+import { Bcrypt } from 'src/shared/bcrypt-helper';
+import { DatabaseErrors } from 'src/shared/database-errors';
+import { SigninDto } from './dto/signin.dto';
+import { SignupDto } from './dto/signup.dto';
 import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
@@ -45,12 +46,14 @@ export class AuthService {
     }
   }
 
-  async signin(jwtPayload: JwtPayload): Promise<{ accessToken: string }> {
-    try {
-      const { email } = jwtPayload;
-      const user = await this.userRepository.findByEmail(email);
+  async signin(signinDto: SigninDto): Promise<{ accessToken: string }> {
+    const { email, password } = signinDto;
 
-      if (user) {
+    try {
+      const user = await this.userRepository.findByEmail(email);
+      const isValidPassword = Bcrypt.compare(password, user.encrptedPassword);
+
+      if (user && isValidPassword) {
         const payload: JwtPayload = { email };
         const accessToken: string = await this.jwtService.sign(payload);
         return { accessToken };
