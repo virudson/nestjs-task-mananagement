@@ -10,7 +10,4 @@ export class User {
 
   @Column({ name: 'encrypted_password' })
   encrptedPassword: string;
-
-  @Column({ name: 'auth_token' })
-  token: string;
 }

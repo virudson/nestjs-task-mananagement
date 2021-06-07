@@ -8,19 +8,20 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DatabaseErrors } from 'src/shared/database-errors';
 import { SignupDto } from './dto/signup.dto';
-import { User } from '../../models/user.entity';
 import { UsersRepository } from '../../repositories/user.repository';
 import { Bcrypt } from 'src/shared/bcrypt-helper';
-import { SigninDto } from './dto/signin.dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UsersRepository)
     private userRepository: UsersRepository,
+    private jwtService: JwtService,
   ) {}
 
-  async signup(signupDto: SignupDto): Promise<User> {
+  async signup(signupDto: SignupDto): Promise<{ accessToken: string }> {
     const { email, password } = signupDto;
     const encrptedPassword = Bcrypt.encrypt(password);
     const record = this.userRepository.create({
@@ -30,7 +31,10 @@ export class AuthService {
 
     try {
       await this.userRepository.save(record);
-      return record;
+      const payload: JwtPayload = { email };
+      const accessToken: string = await this.jwtService.sign(payload);
+
+      return { accessToken };
     } catch (error) {
       switch (error.code) {
         case DatabaseErrors.DUPLICATED:
@@ -41,15 +45,15 @@ export class AuthService {
     }
   }
 
-  async signin(signinDto: SigninDto): Promise<User> {
-    const { email, password } = signinDto;
-
+  async signin(jwtPayload: JwtPayload): Promise<{ accessToken: string }> {
     try {
+      const { email } = jwtPayload;
       const user = await this.userRepository.findByEmail(email);
-      const isValidPassword = Bcrypt.compare(password, user.encrptedPassword);
 
-      if (isValidPassword) {
-        return user;
+      if (user) {
+        const payload: JwtPayload = { email };
+        const accessToken: string = await this.jwtService.sign(payload);
+        return { accessToken };
       } else {
         throw new UnprocessableEntityException();
       }
