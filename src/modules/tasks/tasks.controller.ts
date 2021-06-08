@@ -17,7 +17,7 @@ import { Task } from '../../models/task.entity';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('tasks')
-// @UseGuards(AuthGuard())
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
