@@ -1,6 +1,7 @@
 import { title } from 'process';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatuses } from '../shared/task-statuses';
+import { User } from './user.entity';
 
 @Entity()
 export class Task {
@@ -15,4 +16,7 @@ export class Task {
 
   @Column()
   status: TaskStatuses;
+
+  @ManyToOne((_type) => User, (user) => user.tasks, { eager: false })
+  user: User;
 }
