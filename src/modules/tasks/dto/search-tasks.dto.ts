@@ -4,4 +4,5 @@ import { TaskStatuses } from '../../../shared/task-statuses';
 export class SearchTasksDto {
   status?: TaskStatuses;
   search?: string;
+  user?: string;
 }

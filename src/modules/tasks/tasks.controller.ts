@@ -17,6 +17,7 @@ import { Task } from '../../models/task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { User } from 'src/models/user.entity';
+import { TaskSerializer } from 'src/serializers/task-serializer';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -24,13 +25,19 @@ export class TasksController {
   constructor(private taskService: TasksService) {}
 
   @Get()
-  index(@Query() searchDto: SearchTasksDto): Promise<Task[]> {
-    return this.taskService.getAll(searchDto);
+  index(
+    @Query() searchDto: SearchTasksDto,
+    @CurrentUser() currentUser: User,
+  ): Promise<Task[]> {
+    return this.taskService.getAll(searchDto, currentUser);
   }
 
   @Get('/:id')
-  show(@Param('id') id: string): Promise<Task> {
-    return this.taskService.find(id);
+  show(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: User,
+  ): Promise<Task> {
+    return this.taskService.find(id, currentUser);
   }
 
   @Post()
@@ -45,12 +52,16 @@ export class TasksController {
   update(
     @Param('id') id: string,
     @Body() taskDto: UpdateTaskDto,
+    @CurrentUser() currentUser: User,
   ): Promise<Task> {
-    return this.taskService.update(id, taskDto);
+    return this.taskService.update(id, taskDto, currentUser);
   }
 
   @Delete('/:id')
-  destroy(@Param('id') id: string): Promise<void> {
-    return this.taskService.destroy(id);
+  destroy(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: User,
+  ): Promise<void> {
+    return this.taskService.destroy(id, currentUser);
   }
 }
